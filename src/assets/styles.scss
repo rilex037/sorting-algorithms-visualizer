@@ -1,0 +1,39 @@
+$primary-color: #9b4bb9;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #0c0c0c;
+  color: $primary-color;
+  font-family: 'Roboto', sans-serif;
+}
+
+.block {
+  display: block;
+  margin: 1rem;
+}
+
+canvas {
+  opacity: 90%;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin: 1rem;
+}
+
+select,
+button {
+  margin: 0 auto;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #3a3a3a;
+  background-color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
