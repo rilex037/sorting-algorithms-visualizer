@@ -18,7 +18,9 @@ const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   chartBars.forEach((chartBar, i) => {
     const maxValue = Math.max(...chartBars.map((chartBar) => chartBar.value));
-    playSound(chartBar);
+    if (chartBar.isPointer) {
+      playSound(chartBar);
+    }
     const barHeight = (chartBar.value / maxValue) * canvas.height;
     const redShade = Math.round((chartBar.value / maxValue) * 255);
     chartBar.color = `rgb(${redShade}, 12,77)`;
@@ -62,7 +64,10 @@ sortSelectElement?.addEventListener('change', (e) => {
     document.getElementById('caption')!.innerHTML = algorithm.name;
     chartBars = shuffleNumbers(algorithm.optimalDepth ?? 100);
     algorithmMethods[algorithm.file](chartBars).then(() => {
-      SimplePass(chartBars);
+      /**
+       * @todo: this will ignore the fact we started running another algorithm
+       */
+     SimplePass(chartBars);
     });
   }
 });
