@@ -1,6 +1,6 @@
 import { ChartBar } from '../interface/ChartBar';
 
-export const mergeSort = async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]) => {
   const merge = async (left: number, mid: number, right: number) => {
     const n1 = mid - left + 1;
     const n2 = right - mid;
@@ -9,13 +9,13 @@ export const mergeSort = async (chartBars: ChartBar[]) => {
     for (let i = 0; i < n1; i++) {
       L[i] = chartBars[left + i];
       chartBars[left + i].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[left + i].isPointer = false;
     }
     for (let j = 0; j < n2; j++) {
       R[j] = chartBars[mid + 1 + j];
       chartBars[mid + 1 + j].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[mid + 1 + j].isPointer = false;
     }
     let i = 0;

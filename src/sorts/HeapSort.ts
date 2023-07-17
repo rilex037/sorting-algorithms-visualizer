@@ -1,6 +1,6 @@
 import { ChartBar } from '../interface/ChartBar';
 
-export const heapSort = async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]) => {
   const heapify = async (n: number, i: number) => {
     let largest = i;
     const l = 2 * i + 1;
@@ -17,7 +17,7 @@ export const heapSort = async (chartBars: ChartBar[]) => {
       chartBars[i] = chartBars[largest];
       chartBars[largest] = temp;
       chartBars[i].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[i].isPointer = false;
       await heapify(n, largest);
     }
@@ -32,7 +32,7 @@ export const heapSort = async (chartBars: ChartBar[]) => {
       chartBars[0] = chartBars[i];
       chartBars[i] = temp;
       chartBars[i].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[i].isPointer = false;
       await heapify(i, 0);
     }

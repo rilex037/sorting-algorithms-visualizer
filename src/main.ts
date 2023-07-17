@@ -1,15 +1,18 @@
 import './assets/styles.scss';
 import { ChartBar } from './interface/ChartBar';
 import { getCanvasInfo } from './include/Canvas';
-import { bubbleSort } from './sorts/BuubleSort';
-import { selectionSort } from './sorts/SelectionSort';
-import { radixSort } from './sorts/RadixSort';
-import { quickSort } from './sorts/QuickSort';
 import { shuffleNumbers } from './helpers';
-import { heapSort } from './sorts/HeapSort';
-import { insertionSort } from './sorts/InsertionSort';
 import { playSound, stopSound } from './include/Sounts';
-import { mergeSort } from './sorts/MergeSort';
+import { algorithms } from './algorithms';
+import BubbleSort from './sorts/BuubleSort';
+import SelectionSort from './sorts/SelectionSort';
+import RadixSort from './sorts/RadixSort';
+import QuickSort from './sorts/QuickSort';
+import HeapSort from './sorts/HeapSort';
+import InsertionSort from './sorts/InsertionSort';
+import MergeSort from './sorts/MergeSort';
+import SimplePass from './sorts/SimplePass';
+import { AlgorithmMethods } from './interface/Algorithm';
 
 const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -24,66 +27,52 @@ const drawChart = () => {
   });
 };
 
+const reset = () => {
+  chartBars = shuffleNumbers(0);
+  document.getElementById('caption')!.innerHTML = 'Select a sorting algorithm';
+  drawChart();
+  stopSound();
+};
+
 let chartBars: ChartBar[] = [];
-let sortingValue = 'bubbleSort';
+let sortingValue;
 const sortSelectElement = document.getElementById('sortSelect');
 const sortResetElement = document.getElementById('sortReset');
 const startSortElement = document.getElementById('sortStart');
-
 chartBars = shuffleNumbers(100);
+
+const algorithmMethods: AlgorithmMethods = {
+  BubbleSort: BubbleSort,
+  SelectionSort: SelectionSort,
+  RadixSort: RadixSort,
+  QuickSort: QuickSort,
+  HeapSort: HeapSort,
+  InsertionSort: InsertionSort,
+  MergeSort: MergeSort,
+  SimplePass: SimplePass,
+};
+
 let started = false;
-sortSelectElement?.addEventListener('click', (e) => {
+sortSelectElement?.addEventListener('change', (e) => {
   started = true;
   sortingValue = (e.target as HTMLSelectElement).value;
-  switch (sortingValue) {
-    case 'bubbleSort':
-      document.getElementById('caption')!.innerHTML = 'Bubble Sort';
-      chartBars = shuffleNumbers(100);
-      bubbleSort(chartBars);
-      break;
-    case 'heapSort':
-      document.getElementById('caption')!.innerHTML = 'Heap Sort';
-      chartBars = shuffleNumbers(500);
-      heapSort(chartBars);
-      break;
-    case 'quickSort':
-      document.getElementById('caption')!.innerHTML = 'Quick Sort';
-      chartBars = shuffleNumbers(500);
-      quickSort(chartBars);
-      break;
-    case 'selectionSort':
-      document.getElementById('caption')!.innerHTML = 'Selection Sort';
-      chartBars = shuffleNumbers(100);
-      selectionSort(chartBars);
-      break;
-    case 'radixSort':
-      document.getElementById('caption')!.innerHTML = 'Radix Sort';
-      chartBars = shuffleNumbers(500);
-      radixSort(chartBars);
-      break;
-    case 'insertionSort':
-      document.getElementById('caption')!.innerHTML = 'Insertion Sort';
-      chartBars = shuffleNumbers(100);
-      insertionSort(chartBars);
-      break;
-    case 'mergeSort':
-      document.getElementById('caption')!.innerHTML = 'Merge Sort';
-      chartBars = shuffleNumbers(500);
-      mergeSort(chartBars);
-      break;
-    default:
-      break;
+  const algorithm = algorithms[sortingValue];
+  if (algorithm) {
+    algorithm.optimalDepth;
+    document.getElementById('caption')!.innerHTML = algorithm.name;
+    chartBars = shuffleNumbers(algorithm.optimalDepth ?? 100);
+    algorithmMethods[algorithm.file](chartBars).then(() => {
+      SimplePass(chartBars);
+    });
   }
 });
 
 sortResetElement?.addEventListener('click', () => {
-  sortSelectElement?.dispatchEvent(new Event('click'));
+  reset();
 });
 
-//sortSelectElement?.dispatchEvent(new Event('click'));
-
 startSortElement?.addEventListener('click', () => {
-  sortSelectElement?.dispatchEvent(new Event('click'));
+  sortSelectElement?.dispatchEvent(new Event('change'));
 });
 
 const { canvas, ctx, bar } = getCanvasInfo(chartBars);

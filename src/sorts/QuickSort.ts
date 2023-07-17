@@ -1,6 +1,6 @@
 import { ChartBar } from '../interface/ChartBar';
 
-export const quickSort = async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]) => {
   const partition = async (low: number, high: number) => {
     const pivot = chartBars[high].value;
 
@@ -13,7 +13,7 @@ export const quickSort = async (chartBars: ChartBar[]) => {
         chartBars[j] = temp;
       }
       chartBars[j].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[j].isPointer = false;
     }
     chartBars[high].isPointer = false;

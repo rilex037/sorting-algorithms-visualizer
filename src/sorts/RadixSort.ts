@@ -1,6 +1,6 @@
 import { ChartBar } from '../interface/ChartBar';
 
-export const radixSort = async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]) => {
   const getMax = () => {
     let max = 0;
     for (let i = 0; i < chartBars.length; i++) {
@@ -26,7 +26,7 @@ export const radixSort = async (chartBars: ChartBar[]) => {
     for (let i = 0; i < chartBars.length; i++) {
       chartBars[i] = output[i];
       chartBars[i].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 0.01));
+      await new Promise((resolve) => setTimeout(resolve, 5));
       chartBars[i].isPointer = false;
     }
   };
