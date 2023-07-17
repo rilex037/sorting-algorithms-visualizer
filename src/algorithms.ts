@@ -16,11 +16,6 @@ export const algorithms: Record<string, Algorithm> = {
         file: 'QuickSort',
         optimalDepth: 300,
     },
-    selectionSort: {
-        name: 'Selection Sort',
-        file: 'SelectionSort',
-        optimalDepth: 100,
-    },
     radixSort: {
         name: 'Radix Sort',
         file: 'RadixSort',
@@ -35,6 +30,11 @@ export const algorithms: Record<string, Algorithm> = {
         name: 'Merge Sort',
         file: 'MergeSort',
         optimalDepth: 500,
+    },
+    cocktailShaker: {
+        name: 'Cocktail Shaker',
+        file: 'CocktailShaker',
+        optimalDepth: 100,
     },
     simplePass: {
         name: 'Simple Pass',

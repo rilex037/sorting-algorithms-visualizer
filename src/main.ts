@@ -5,7 +5,6 @@ import { shuffleNumbers } from './helpers';
 import { playSound, stopSound } from './include/Sounts';
 import { algorithms } from './algorithms';
 import BubbleSort from './sorts/BuubleSort';
-import SelectionSort from './sorts/SelectionSort';
 import RadixSort from './sorts/RadixSort';
 import QuickSort from './sorts/QuickSort';
 import HeapSort from './sorts/HeapSort';
@@ -13,6 +12,7 @@ import InsertionSort from './sorts/InsertionSort';
 import MergeSort from './sorts/MergeSort';
 import SimplePass from './sorts/SimplePass';
 import { AlgorithmMethods } from './interface/Algorithm';
+import CocktailShaker from './sorts/CocktailShaker';
 
 const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -45,12 +45,12 @@ chartBars = shuffleNumbers(100);
 
 const algorithmMethods: AlgorithmMethods = {
   BubbleSort: BubbleSort,
-  SelectionSort: SelectionSort,
   RadixSort: RadixSort,
   QuickSort: QuickSort,
   HeapSort: HeapSort,
   InsertionSort: InsertionSort,
   MergeSort: MergeSort,
+  CocktailShaker: CocktailShaker,
   SimplePass: SimplePass,
 };
 
@@ -67,7 +67,7 @@ sortSelectElement?.addEventListener('change', (e) => {
       /**
        * @todo: this will ignore the fact we started running another algorithm
        */
-     SimplePass(chartBars);
+      //SimplePass(chartBars);
     });
   }
 });
@@ -89,10 +89,17 @@ setInterval(() => {
   }
 }, 5);
 
-// Stop sound when sorting is done
-setInterval(async () => {
-  if (chartBars.every((chartBar, i) => chartBar.value === i + 1)) {
-    stopSound();
-    return;
+let intervalId: NodeJS.Timeout;
+
+function checkAndExecute() {
+  if (chartBars.every((chartBar, i) => chartBar.value === i + 1 && started)) {
+    clearInterval(intervalId); // Clear the interval to stop further execution
+    SimplePass(chartBars).then(() => {
+      started = false;
+      stopSound();
+      drawChart();
+    });
   }
-}, 100);
+}
+
+intervalId = setInterval(checkAndExecute, 100);
