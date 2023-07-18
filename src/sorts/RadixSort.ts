@@ -11,7 +11,7 @@ export default async (chartBars: ChartBar[]) => {
     return max;
   };
   const countingSort = async (exp: number) => {
-    const output = Array.from({ length: chartBars.length }, () => ({ value: 0, isPointer: false, color: 'gray' }));
+    const output = Array.from({ length: chartBars.length }, () => ({ value: 0, isPointer: false, color: null }));
     const count = Array.from({ length: 10 }, () => 0);
     for (let i = 0; i < chartBars.length; i++) {
       count[Math.floor(chartBars[i].value / exp) % 10]++;
@@ -20,7 +20,11 @@ export default async (chartBars: ChartBar[]) => {
       count[i] += count[i - 1];
     }
     for (let i = chartBars.length - 1; i >= 0; i--) {
-      output[count[Math.floor(chartBars[i].value / exp) % 10] - 1] = chartBars[i];
+      output[count[Math.floor(chartBars[i].value / exp) % 10] - 1] = {
+        value: chartBars[i].value,
+        isPointer: false,
+        color: null,
+      };
       count[Math.floor(chartBars[i].value / exp) % 10]--;
     }
     for (let i = 0; i < chartBars.length; i++) {
