@@ -19,8 +19,11 @@
     "@types/node": "^16.11.45",
     "eslint": "^8.1.0",
     "prettier": "^2.5.1",
+    "sass": "^1.63.6",
     "typescript": "^5.0.2",
-    "vite": "^4.4.0",
-    "sass": "^1.63.6"
+    "vite": "^4.4.0"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.0.1"
   }
 }
