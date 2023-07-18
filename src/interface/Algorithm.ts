@@ -1,8 +1,8 @@
-import { ChartBar } from "./ChartBar";
+import { ChartBar } from './ChartBar';
 
 export interface Algorithm {
   name: string;
-  file:  string;
+  method: (chartBars: ChartBar[]) => Promise<void>;
   optimalDepth?: number;
 }
 

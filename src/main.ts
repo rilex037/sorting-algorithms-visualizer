@@ -4,16 +4,6 @@ import { getCanvasInfo } from './include/Canvas';
 import { shuffleNumbers } from './helpers';
 import { playSound, stopSound } from './include/Sounds';
 import { algorithms } from './algorithms';
-import BubbleSort from './sorts/BuubleSort';
-import RadixSort from './sorts/RadixSort';
-import QuickSort from './sorts/QuickSort';
-import HeapSort from './sorts/HeapSort';
-import InsertionSort from './sorts/InsertionSort';
-import MergeSort from './sorts/MergeSort';
-import SimplePass from './sorts/SimplePass';
-import { AlgorithmMethods } from './interface/Algorithm';
-import CocktailShaker from './sorts/CocktailShaker';
-import BogoSort from './sorts/BogoSort';
 import { inject } from '@vercel/analytics';
 
 inject();
@@ -48,18 +38,6 @@ const sortResetElement = document.getElementById('sortReset');
 const startSortElement = document.getElementById('sortStart');
 chartBars = shuffleNumbers(100);
 
-const algorithmMethods: AlgorithmMethods = {
-  BubbleSort: BubbleSort,
-  RadixSort: RadixSort,
-  QuickSort: QuickSort,
-  HeapSort: HeapSort,
-  InsertionSort: InsertionSort,
-  MergeSort: MergeSort,
-  CocktailShaker: CocktailShaker,
-  BogoSort: BogoSort,
-  SimplePass: SimplePass,
-};
-
 let started = false;
 sortSelectElement?.addEventListener('change', (e) => {
   started = true;
@@ -69,8 +47,8 @@ sortSelectElement?.addEventListener('change', (e) => {
     algorithm.optimalDepth;
     document.getElementById('caption')!.innerHTML = algorithm.name;
     chartBars = shuffleNumbers(algorithm.optimalDepth ?? 100);
-    algorithmMethods[algorithm.file](chartBars).then(async () => {
-      await SimplePass(chartBars);
+    algorithm.method(chartBars).then(async () => {
+      await algorithms.simplePass.method(chartBars);
       started = false;
       stopSound();
     });

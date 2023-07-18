@@ -1,48 +1,57 @@
 import { Algorithm } from './interface/Algorithm';
+import BubbleSort from './sorts/BuubleSort';
+import RadixSort from './sorts/RadixSort';
+import QuickSort from './sorts/QuickSort';
+import HeapSort from './sorts/HeapSort';
+import InsertionSort from './sorts/InsertionSort';
+import MergeSort from './sorts/MergeSort';
+import CocktailShaker from './sorts/CocktailShaker';
+import BogoSort from './sorts/BogoSort';
+import SimplePass from './sorts/SimplePass';
 
 export const algorithms: Record<string, Algorithm> = {
     bubbleSort: {
         name: 'Bubble Sort',
-        file: 'BubbleSort',
+        method: BubbleSort,
         optimalDepth: 100,
     },
     heapSort: {
         name: 'Heap Sort',
-        file: 'HeapSort',
+        method:  HeapSort,
         optimalDepth: 300,
     },
     quickSort: {
         name: 'Quick Sort',
-        file: 'QuickSort',
+        method: QuickSort,
         optimalDepth: 300,
     },
     radixSort: {
         name: 'Radix Sort',
-        file: 'RadixSort',
+        method: RadixSort,
         optimalDepth: 500,
     },
     insertionSort: {
         name: 'Insertion Sort',
-        file: 'InsertionSort',
+        method:  InsertionSort,
         optimalDepth: 100,
     },
     mergeSort: {
         name: 'Merge Sort',
-        file: 'MergeSort',
+        method: MergeSort,
         optimalDepth: 500,
     },
     cocktailShaker: {
         name: 'Cocktail Shaker',
-        file: 'CocktailShaker',
+        method: CocktailShaker,
         optimalDepth: 100,
     },
     bogoSort: {
         name: 'Bogo Sort',
-        file: 'BogoSort',
+        method: BogoSort,
         optimalDepth: 20,
     },
     simplePass: {
         name: 'Simple Pass',
-        file: 'SimplePass',
+        method:  SimplePass,
     },
 };
