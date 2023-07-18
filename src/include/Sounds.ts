@@ -10,7 +10,7 @@ class OscillatorSingleton {
   private constructor() {
     this.audioCtx = new AudioContext();
     this.osc = this.audioCtx.createOscillator();
-    this.osc.type = 'square';
+    this.osc.type = 'triangle';
     this.osc.frequency.value = 440;
     this.gainNode = this.audioCtx.createGain();
     this.gainNode.gain.value = 0.1;
@@ -33,7 +33,7 @@ class OscillatorSingleton {
 
 export const playSound = (chartBar: ChartBar) => {
   const osc = OscillatorSingleton.getInstance().getOscillator();
-  osc.frequency.value = chartBar.value + 45 * 2;
+  osc.frequency.value = chartBar.value + 50;
 };
 
 export const stopSound = () => {
