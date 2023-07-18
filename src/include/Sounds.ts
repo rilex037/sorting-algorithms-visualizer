@@ -33,7 +33,7 @@ class OscillatorSingleton {
 
 export const playSound = (chartBar: ChartBar) => {
   const osc = OscillatorSingleton.getInstance().getOscillator();
-  osc.frequency.value = chartBar.value + 30 * 3.5;
+  osc.frequency.value = chartBar.value + 40 * 3.5;
 };
 
 export const stopSound = () => {

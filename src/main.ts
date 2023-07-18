@@ -13,6 +13,7 @@ import MergeSort from './sorts/MergeSort';
 import SimplePass from './sorts/SimplePass';
 import { AlgorithmMethods } from './interface/Algorithm';
 import CocktailShaker from './sorts/CocktailShaker';
+import BogoSort from './sorts/BogoSort';
 
 const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -23,7 +24,7 @@ const drawChart = () => {
     }
     const barHeight = (chartBar.value / maxValue) * canvas.height;
     const redShade = Math.round((chartBar.value / maxValue) * 255);
-    chartBar.color = `rgb(${redShade}, 12,77)`;
+    chartBar.color = chartBar.color ? chartBar.color : `rgb(${redShade}, 12,77)`;
     ctx.fillStyle = chartBar.isPointer ? 'yellow' : chartBar.color;
     ctx.fillRect((i * canvas.width) / chartBars.length, canvas.height - barHeight, bar, barHeight);
   });
@@ -51,6 +52,7 @@ const algorithmMethods: AlgorithmMethods = {
   InsertionSort: InsertionSort,
   MergeSort: MergeSort,
   CocktailShaker: CocktailShaker,
+  BogoSort: BogoSort,
   SimplePass: SimplePass,
 };
 

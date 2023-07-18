@@ -6,6 +6,6 @@ export const shuffleNumbers = (bars: number): ChartBar[] => {
     const j = Math.floor(Math.random() * (i + 1));
     [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
   }
-  const chartBars: ChartBar[] = numbers.map((num) => ({ value: num, isPointer: false, color: '#fff' }));
+  const chartBars: ChartBar[] = numbers.map((num) => ({ value: num, isPointer: false, color: null }));
   return chartBars;
 };

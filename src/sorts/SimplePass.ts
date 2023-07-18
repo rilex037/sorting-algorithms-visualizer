@@ -1,10 +1,26 @@
 import { ChartBar } from '../interface/ChartBar';
 
 export default async (chartBars: ChartBar[]) => {
-  const totalIterations = chartBars.length - 1;
+  const totalIterations = chartBars.length;
+  let currentIteration = 0;
 
-  for (let i = 0; i <= totalIterations; i++) {
-    chartBars[i].isPointer = true;
-    await new Promise((resolve) => setTimeout(resolve, 5));
-  }
+  return new Promise<void>((resolve) => {
+    const animate = () => {
+      if (currentIteration >= totalIterations) {
+        resolve();
+        return;
+      }
+
+      chartBars[currentIteration].isPointer = true;
+
+      requestAnimationFrame(() => {
+        chartBars[currentIteration].isPointer = false;
+        chartBars[currentIteration].color = 'green';
+        currentIteration++;
+        animate();
+      });
+    };
+
+    animate();
+  });
 };

@@ -36,6 +36,11 @@ export const algorithms: Record<string, Algorithm> = {
         file: 'CocktailShaker',
         optimalDepth: 100,
     },
+    bogoSort: {
+        name: 'Bogo Sort',
+        file: 'BogoSort',
+        optimalDepth: 12,
+    },
     simplePass: {
         name: 'Simple Pass',
         file: 'SimplePass',
