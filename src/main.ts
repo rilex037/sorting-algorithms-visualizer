@@ -22,10 +22,11 @@ const drawChart = () => {
     if (chartBar.isPointer && started) {
       playSound(chartBar);
     }
+    let color;
     const barHeight = (chartBar.value / maxValue) * canvas.height;
     const redShade = Math.round((chartBar.value / maxValue) * 255);
-    chartBar.color = chartBar.color ? chartBar.color : `rgb(${redShade}, 12,77)`;
-    ctx.fillStyle = chartBar.isPointer ? 'yellow' : chartBar.color;
+    color = chartBar.color ? chartBar.color : `rgb(${redShade}, 12,77)`;
+    ctx.fillStyle = chartBar.isPointer ? 'yellow' : color;
     ctx.fillRect((i * canvas.width) / chartBars.length, canvas.height - barHeight, bar, barHeight);
   });
 };
