@@ -2,7 +2,7 @@ import './assets/styles.scss';
 import { ChartBar } from './interface/ChartBar';
 import { getCanvasInfo } from './include/Canvas';
 import { shuffleNumbers } from './helpers';
-import { playSound, stopSound } from './include/Sounts';
+import { playSound, stopSound } from './include/Sounds';
 import { algorithms } from './algorithms';
 import BubbleSort from './sorts/BuubleSort';
 import RadixSort from './sorts/RadixSort';
@@ -18,7 +18,7 @@ const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   chartBars.forEach((chartBar, i) => {
     const maxValue = Math.max(...chartBars.map((chartBar) => chartBar.value));
-    if (chartBar.isPointer) {
+    if (chartBar.isPointer && started) {
       playSound(chartBar);
     }
     const barHeight = (chartBar.value / maxValue) * canvas.height;
@@ -63,11 +63,10 @@ sortSelectElement?.addEventListener('change', (e) => {
     algorithm.optimalDepth;
     document.getElementById('caption')!.innerHTML = algorithm.name;
     chartBars = shuffleNumbers(algorithm.optimalDepth ?? 100);
-    algorithmMethods[algorithm.file](chartBars).then(() => {
-      /**
-       * @todo: this will ignore the fact we started running another algorithm
-       */
-      //SimplePass(chartBars);
+    algorithmMethods[algorithm.file](chartBars).then(async () => {
+      await SimplePass(chartBars);
+      started = false;
+      stopSound();
     });
   }
 });
@@ -82,24 +81,10 @@ startSortElement?.addEventListener('click', () => {
 
 const { canvas, ctx, bar } = getCanvasInfo(chartBars);
 
-// Draw chart
-setInterval(() => {
-  if (started) {
-    drawChart();
-  }
-}, 5);
+// Draw chart using requestAnimationFrame
+const drawChartLoop = () => {
+  drawChart();
 
-let intervalId: NodeJS.Timeout;
-
-function checkAndExecute() {
-  if (chartBars.every((chartBar, i) => chartBar.value === i + 1 && started)) {
-    clearInterval(intervalId); // Clear the interval to stop further execution
-    SimplePass(chartBars).then(() => {
-      started = false;
-      stopSound();
-      drawChart();
-    });
-  }
-}
-
-intervalId = setInterval(checkAndExecute, 100);
+  requestAnimationFrame(drawChartLoop);
+};
+drawChartLoop();
