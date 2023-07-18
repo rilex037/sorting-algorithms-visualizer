@@ -9,7 +9,7 @@ export const algorithms: Record<string, Algorithm> = {
     heapSort: {
         name: 'Heap Sort',
         file: 'HeapSort',
-        optimalDepth: 500,
+        optimalDepth: 300,
     },
     quickSort: {
         name: 'Quick Sort',
