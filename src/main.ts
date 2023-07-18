@@ -30,9 +30,9 @@ const drawChart = () => {
 };
 
 const reset = () => {
-  chartBars = shuffleNumbers(0);
+  chartBars = shuffleNumbers(100);
   document.getElementById('caption')!.innerHTML = 'Select a sorting algorithm';
-  drawChart();
+  started = false;
   stopSound();
 };
 
@@ -84,7 +84,6 @@ const { canvas, ctx, bar } = getCanvasInfo(chartBars);
 // Draw chart using requestAnimationFrame
 const drawChartLoop = () => {
   drawChart();
-
   requestAnimationFrame(drawChartLoop);
 };
 drawChartLoop();
