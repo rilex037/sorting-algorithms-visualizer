@@ -14,6 +14,9 @@ import SimplePass from './sorts/SimplePass';
 import { AlgorithmMethods } from './interface/Algorithm';
 import CocktailShaker from './sorts/CocktailShaker';
 import BogoSort from './sorts/BogoSort';
+import { inject } from '@vercel/analytics';
+
+inject();
 
 const drawChart = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
