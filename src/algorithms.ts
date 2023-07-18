@@ -39,7 +39,7 @@ export const algorithms: Record<string, Algorithm> = {
     bogoSort: {
         name: 'Bogo Sort',
         file: 'BogoSort',
-        optimalDepth: 12,
+        optimalDepth: 20,
     },
     simplePass: {
         name: 'Simple Pass',
