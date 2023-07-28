@@ -1,16 +1,13 @@
 import { ChartBar } from '../interface/ChartBar';
+import { setPointer } from '../pointer';
 
-export default async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]): Promise<void> => {
   let left = 0;
   let right = chartBars.length - 1;
   let swapped = false;
-
   while (left <= right) {
     for (let i = left; i < right; i++) {
-      chartBars[i].isPointer = true;
-
-      await new Promise((resolve) => setTimeout(resolve, 5));
-      chartBars[i].isPointer = false;
+      await setPointer([chartBars[i]]);
 
       if (chartBars[i].value > chartBars[i + 1].value) {
         const temp = chartBars[i];
@@ -19,7 +16,6 @@ export default async (chartBars: ChartBar[]) => {
         swapped = true;
       }
     }
-
     if (!swapped) {
       break;
     }
@@ -27,11 +23,7 @@ export default async (chartBars: ChartBar[]) => {
     right--;
 
     for (let i = right; i > left; i--) {
-      chartBars[i].isPointer = true;
-
-      await new Promise((resolve) => setTimeout(resolve, 5));
-      chartBars[i].isPointer = false;
-
+      await setPointer([chartBars[i]]);
       if (chartBars[i].value < chartBars[i - 1].value) {
         const temp = chartBars[i];
         chartBars[i] = chartBars[i - 1];

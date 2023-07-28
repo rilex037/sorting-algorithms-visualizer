@@ -8,7 +8,7 @@
 
   <body>
     <div class="block">
-      <h1 id="caption">Select a sorting algorithm</h1>
+      <h1 id="caption"></h1>
       <canvas id="chart" width="1084" height="400"></canvas>
       <div class="form-group">
         <select id="sortSelect">
@@ -22,7 +22,7 @@
           <option value="bogoSort">Bogo Sort</option>
         </select>
         <button id="sortStart">Start</button>
-        <button id="sortReset">Reset</button>
+        <button onclick="location.reload()">Restart</button>
       </div>
       <div></div>
       <script type="module" src="/src/main.ts"></script>

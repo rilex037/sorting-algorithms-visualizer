@@ -1,6 +1,7 @@
 import { ChartBar } from '../interface/ChartBar';
+import { setPointer } from '../pointer';
 
-export default async (chartBars: ChartBar[]) => {
+export default async (chartBars: ChartBar[]): Promise<void> => {
   const isSorted = (arr: ChartBar[]) => {
     for (let i = 0; i < arr.length - 1; i++) {
       if (arr[i].value > arr[i + 1].value) {
@@ -20,10 +21,6 @@ export default async (chartBars: ChartBar[]) => {
 
   while (!isSorted(chartBars)) {
     shuffle(chartBars);
-    for (let j = 0; j < chartBars.length - 1; j++) {
-      chartBars[j].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      chartBars[j].isPointer = false;
-    }
+    await setPointer([chartBars[chartBars.length - 1]], 300);
   }
 };

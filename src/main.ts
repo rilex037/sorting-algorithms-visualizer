@@ -1,71 +1,74 @@
 import './assets/styles.scss';
 import { ChartBar } from './interface/ChartBar';
 import { getCanvasInfo } from './include/Canvas';
-import { shuffleNumbers } from './helpers';
+import { sorts } from './sorts';
+import type { Algorithm } from './interface/Algorithm';
+import { shuffleNumbers, watch } from './helpers';
 import { playSound, stopSound } from './include/Sounds';
-import { algorithms } from './algorithms';
-import { inject } from '@vercel/analytics';
 
-inject();
+// Initial setup
+let chartBars: ChartBar[] = [];
+const sortSelectElement = document.getElementById('sortSelect') as HTMLSelectElement;
+sortSelectElement.value = localStorage.getItem('algorithm') || 'bubbleSort';
+const startSortElement = document.getElementById('sortStart') as HTMLButtonElement;
+const captionElement = document.getElementById('caption') as HTMLHeadingElement;
+captionElement.innerText = sorts[sortSelectElement.value].name;
+let algorithm: Algorithm = sorts[sortSelectElement.value];
+chartBars = shuffleNumbers(algorithm.optimalDepth as number);
+
+const disableButtons = () => {
+  startSortElement.disabled = true;
+  sortSelectElement.disabled = true;
+};
+
+const enableButtons = () => {
+  startSortElement.disabled = false;
+  sortSelectElement.disabled = false;
+};
+
+let state = { started: false };
+const watchedState = watch(state, 'started', (value) => {
+  if (!value) {
+    stopSound();
+  }
+});
 
 const drawChart = () => {
+  const { canvas, ctx, bar } = getCanvasInfo(chartBars);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   chartBars.forEach((chartBar, i) => {
     const maxValue = Math.max(...chartBars.map((chartBar) => chartBar.value));
-    if (chartBar.isPointer && started) {
+    if (chartBar.isPointer && watchedState.started) {
       playSound(chartBar);
     }
     let color;
     const barHeight = (chartBar.value / maxValue) * canvas.height;
     const redShade = Math.round((chartBar.value / maxValue) * 255);
-    color = chartBar.color ? chartBar.color : `rgb(${redShade}, 12,77)`;
+    color = chartBar.color ? chartBar.color : `rgb(${redShade}, 12, 77)`;
     ctx.fillStyle = chartBar.isPointer ? 'yellow' : color;
     ctx.fillRect((i * canvas.width) / chartBars.length, canvas.height - barHeight, bar, barHeight);
   });
 };
 
-const reset = () => {
-  chartBars = shuffleNumbers(100);
-  document.getElementById('caption')!.innerHTML = 'Select a sorting algorithm';
-  started = false;
-  stopSound();
-};
-
-let chartBars: ChartBar[] = [];
-let sortingValue;
-const sortSelectElement = document.getElementById('sortSelect');
-const sortResetElement = document.getElementById('sortReset');
-const startSortElement = document.getElementById('sortStart');
-chartBars = shuffleNumbers(100);
-
-let started = false;
 sortSelectElement?.addEventListener('change', (e) => {
-  started = true;
-  sortingValue = (e.target as HTMLSelectElement).value;
-  const algorithm = algorithms[sortingValue];
-  if (algorithm) {
-    algorithm.optimalDepth;
-    document.getElementById('caption')!.innerHTML = algorithm.name;
-    chartBars = shuffleNumbers(algorithm.optimalDepth ?? 100);
-    algorithm.method(chartBars).then(async () => {
-      await algorithms.simplePass.method(chartBars);
-      started = false;
-      stopSound();
+  algorithm = sorts[(e.target as HTMLSelectElement).value];
+  localStorage.setItem('algorithm', (e.target as HTMLSelectElement).value);
+  document.getElementById('caption')!.innerHTML = algorithm.name;
+  chartBars = shuffleNumbers(algorithm.optimalDepth);
+});
+
+startSortElement?.addEventListener('click', () => {
+  if (!watchedState.started) {
+    chartBars = shuffleNumbers(algorithm.optimalDepth);
+    watchedState.started = true;
+    disableButtons();
+    algorithm.method(chartBars).then(() => {
+      watchedState.started = false;
+      enableButtons();
     });
   }
 });
 
-sortResetElement?.addEventListener('click', () => {
-  reset();
-});
-
-startSortElement?.addEventListener('click', () => {
-  sortSelectElement?.dispatchEvent(new Event('change'));
-});
-
-const { canvas, ctx, bar } = getCanvasInfo(chartBars);
-
-// Draw chart using requestAnimationFrame
 const drawChartLoop = () => {
   drawChart();
   requestAnimationFrame(drawChartLoop);

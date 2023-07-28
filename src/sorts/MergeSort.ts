@@ -1,55 +1,54 @@
 import { ChartBar } from '../interface/ChartBar';
+import { setPointer } from '../pointer';
 
-export default async (chartBars: ChartBar[]) => {
-  const merge = async (left: number, mid: number, right: number) => {
-    const n1 = mid - left + 1;
-    const n2 = right - mid;
-    const L = new Array(n1);
-    const R = new Array(n2);
-    for (let i = 0; i < n1; i++) {
-      L[i] = chartBars[left + i];
-      chartBars[left + i].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 5));
-      chartBars[left + i].isPointer = false;
-    }
-    for (let j = 0; j < n2; j++) {
-      R[j] = chartBars[mid + 1 + j];
-      chartBars[mid + 1 + j].isPointer = true;
-      await new Promise((resolve) => setTimeout(resolve, 5));
-      chartBars[mid + 1 + j].isPointer = false;
-    }
-    let i = 0;
-    let j = 0;
-    let k = left;
-    while (i < n1 && j < n2) {
-      if (L[i].value <= R[j].value) {
-        chartBars[k] = L[i];
-        i++;
+export default async (chartBars: ChartBar[]): Promise<void> => {
+  const merge = async (start: number, middle: number, end: number): Promise<void> => {
+    const leftHalf = chartBars.slice(start, middle + 1);
+    const rightHalf = chartBars.slice(middle + 1, end + 1);
+
+    let leftIndex = 0;
+    let rightIndex = 0;
+    let resultIndex = start;
+
+    const mergedArray: ChartBar[] = [];
+
+    while (leftIndex < leftHalf.length && rightIndex < rightHalf.length) {
+      if (leftHalf[leftIndex].value <= rightHalf[rightIndex].value) {
+        mergedArray.push(leftHalf[leftIndex]);
+        leftIndex++;
       } else {
-        chartBars[k] = R[j];
-        j++;
+        mergedArray.push(rightHalf[rightIndex]);
+        rightIndex++;
       }
-      k++;
     }
-    while (i < n1) {
-      chartBars[k] = L[i];
-      i++;
-      k++;
+
+    while (leftIndex < leftHalf.length) {
+      mergedArray.push(leftHalf[leftIndex]);
+      leftIndex++;
     }
-    while (j < n2) {
-      chartBars[k] = R[j];
-      j++;
-      k++;
+
+    while (rightIndex < rightHalf.length) {
+      mergedArray.push(rightHalf[rightIndex]);
+      rightIndex++;
     }
-  };
-  const mergeSortHelper = async (left: number, right: number) => {
-    if (left < right) {
-      const mid = Math.floor((left + right) / 2);
-      await mergeSortHelper(left, mid);
-      await mergeSortHelper(mid + 1, right);
-      await merge(left, mid, right);
+
+    for (let i = 0; i < mergedArray.length; i++) {
+      chartBars[resultIndex] = mergedArray[i];
+      await setPointer([chartBars[resultIndex]]);
+      resultIndex++;
     }
   };
 
-  await mergeSortHelper(0, chartBars.length - 1);
+  const mergeSortRecursive = async (start: number, end: number): Promise<void> => {
+    if (start >= end) {
+      return;
+    }
+
+    const middle = Math.floor((start + end) / 2);
+    await mergeSortRecursive(start, middle);
+    await mergeSortRecursive(middle + 1, end);
+    await merge(start, middle, end);
+  };
+
+  await mergeSortRecursive(0, chartBars.length - 1);
 };
