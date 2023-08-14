@@ -5,6 +5,9 @@ import { sorts } from './sorts';
 import type { Algorithm } from './interface/Algorithm';
 import { shuffleNumbers, watch } from './helpers';
 import { playSound, stopSound } from './include/Sounds';
+import { inject } from '@vercel/analytics';
+
+inject();
 
 // Initial setup
 let chartBars: ChartBar[] = [];
